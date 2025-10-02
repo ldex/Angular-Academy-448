@@ -1,6 +1,6 @@
-# Angular Academy Demo Signals Start
+# Angular Academy Demo Signals
 
-Starter Project for the Signals Workshop by <a href="https://angular.ac" target="_blank">Angular Academy</a>.
+Demo Project for the Signals Workshop by <a href="https://angular.ac" target="_blank">Angular Academy</a>.
 
 [![Angular Academy](https://www.angularacademy.ca/images/classroom.jpg "Angular Academy")](https://www.angularacademy.ca)
 
