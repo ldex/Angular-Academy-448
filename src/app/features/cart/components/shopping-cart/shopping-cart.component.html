@@ -1,8 +1,8 @@
 <div class="container mx-auto p-4">
   <h2 class="text-2xl font-bold mb-4">Shopping Cart</h2>
-  @if (items.length > 0) {
+  @if (items().length > 0) {
     <div class="space-y-4">
-      @for (item of items; track item.product) {
+      @for (item of items(); track item.product) {
         <div class="flex items-center justify-between border-b pb-4">
           <div class="flex items-center space-x-4">
             <img [src]="item.productDetails.image" 
@@ -32,7 +32,7 @@
     </div>
     <div class="mt-4 flex justify-between items-center">
       <div class="text-xl font-bold">
-        Total: {{calculateTotal(items) | currency}}
+        Total: {{calculateTotal(items()) | currency}}
       </div>
       <button (click)="onClearCart()"
               class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">

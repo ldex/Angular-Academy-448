@@ -3,16 +3,16 @@
     ← Back to Products
   </button>
 
-  @if (loading) {
+  @if (loading()) {
     <div class="loading"></div>
   } @else {
-      @if(error) {
+      @if(error()) {
         <div class="col-span-3 text-center py-8 text-red-500">
-          {{error}}
+          {{error()}}
         </div>
       }
 
-      @if (product) {
+      @if (product(); as product) {
         <div class="bg-white rounded-lg shadow-lg p-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="flex items-center justify-center">
@@ -42,7 +42,7 @@
                               hover:bg-blue-700 transition-colors">
                   Add to Cart
                 </button>
-                @if (isAuthenticated) {
+                @if (isAuthenticated()) {
                   <a [routerLink]="['/products/edit', product.id]"
                     class="bg-gray-500 text-white px-6 py-3 rounded-lg
                             hover:bg-gray-600 transition-colors">

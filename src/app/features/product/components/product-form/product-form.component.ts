@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, inject, output, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -24,10 +24,10 @@ export class ProductFormComponent {
       });
     }
   }
-  @Input() isSubmitting = false;
+  readonly isSubmitting = input(false);
 
-  @Output() save = new EventEmitter<Partial<Product>>();
-  @Output() cancel = new EventEmitter<void>();
+  readonly save = output<Partial<Product>>();
+  readonly cancel = output<void>();
 
   productForm: FormGroup;
   isEditing = false;
@@ -49,6 +49,7 @@ export class ProductFormComponent {
   }
 
   onCancel(): void {
+    // TODO: The 'emit' function requires a mandatory void argument
     this.cancel.emit();
   }
 }

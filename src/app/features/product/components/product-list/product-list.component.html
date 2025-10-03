@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">Products</h1>
       <div class="space-x-2">
-        @if (isAuthenticated) {
+        @if (isAuthenticated()) {
           <a routerLink="new"
              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
             Add New Product
@@ -19,23 +19,20 @@
       <div class="flex-1">
         <input type="text"
                [(ngModel)]="searchQuery"
-               (ngModelChange)="applyFilters()"
                placeholder="Search products..."
                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
       <div class="flex gap-4">
         <select [(ngModel)]="selectedCategory"
-                (ngModelChange)="applyFilters()"
                 class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="">All Categories</option>
-          @for (category of categories; track category) {
+          @for (category of categories(); track category) {
             <option [value]="category">
               {{category}}
             </option>
           }
         </select>
         <select [(ngModel)]="sortBy"
-                (ngModelChange)="applyFilters()"
                 class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="name">Sort by Name</option>
           <option value="price-asc">Price: Low to High</option>
@@ -47,15 +44,15 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    @if (loading) {
+    @if (loading()) {
       <div class="loading"></div>
     } @else {
-        @if(error) {
+        @if(error()) {
           <div class="col-span-3 text-center py-8 text-red-500">
-            {{error}}
+            {{error()}}
           </div>
         }
-        @for (product of filteredProducts; track product.id) {
+        @for (product of filteredProducts(); track product.id) {
           <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow">
             <a [routerLink]="[product.id]" class="block">
               <img [src]="product.image" [alt]="product.title"
@@ -74,7 +71,7 @@
                       class="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 Add to Cart
               </button>
-              @if (isAuthenticated) {
+              @if (isAuthenticated()) {
                 <a [routerLink]="['edit', product.id]"
                   class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                   Edit
