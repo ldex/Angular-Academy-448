@@ -5,7 +5,7 @@
 
   <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
     <h1 class="text-2xl font-bold mb-6">
-      {{isEditing ? 'Edit' : 'Add'}} Product
+      {{isEditing() ? 'Edit' : 'Add'}} Product
     </h1>
 
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-4">
@@ -80,7 +80,7 @@
                 class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm
                        font-medium text-white bg-blue-600 hover:bg-blue-700
                        disabled:bg-blue-300">
-          {{isSubmitting() ? 'Saving...' : (isEditing ? 'Update' : 'Create')}}
+          {{isSubmitting() ? 'Saving...' : (isEditing() ? 'Update' : 'Create')}}
         </button>
       </div>
     </form>

@@ -5,6 +5,7 @@ import { CartService } from '../../../../services/cart.service';
 import { ProductService } from '../../../../services/product.service';
 import { CartItem } from '../../../../models/cart-item.model';
 import { Product } from '../../../../models/product.model';
+import { ProductStore } from '../../../../stores/product.store';
 
 interface CartItemWithProduct extends CartItem {
   productDetails: Product;
@@ -24,10 +25,10 @@ interface CartItemWithProduct extends CartItem {
 })
 export class ShoppingCartContainerComponent {
   private cartService = inject(CartService);
-  private productService = inject(ProductService);
+  private store = inject(ProductStore)
 
   private cartItems = this.cartService.getCartItems();
-  private products = this.productService.products;
+  private products = this.store.products;
 
   cartItemsWithProducts = computed(() => {
     return this.cartItems().map(item => ({
@@ -35,18 +36,6 @@ export class ShoppingCartContainerComponent {
       productDetails: this.products().find(p => p.id === item.product)!
     }));
   });
-
-  // cartItems$ = combineLatest([
-  //   this.cartService.getCartItems(),
-  //   this.productService.getProducts()
-  // ]).pipe(
-  //   map(([cartItems, products]): CartItemWithProduct[] => {
-  //     return cartItems.map(item => ({
-  //       ...item,
-  //       productDetails: products.find(p => p.id === item.product)!
-  //     }));
-  //   })
-  // );
 
   onUpdateQuantity(event: { productId: number; quantity: number }): void {
     this.cartService.updateQuantity(event.productId, event.quantity);

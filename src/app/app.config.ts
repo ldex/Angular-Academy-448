@@ -1,5 +1,5 @@
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
-import { ApplicationConfig } from "@angular/core";
+import { ApplicationConfig, isDevMode } from "@angular/core";
 import {
   PreloadAllModules,
   provideRouter,
@@ -9,6 +9,7 @@ import {
 import { routes } from "./app.routes";
 import { authInterceptor } from "./interceptors/auth.interceptor";
 import { loadingInterceptor } from "./interceptors/loading.interceptor";
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appProviders = [
   provideHttpClient(withInterceptors([authInterceptor, loadingInterceptor])),
@@ -22,5 +23,6 @@ export const appProviders = [
 export const appConfig: ApplicationConfig = {
   providers: [
     ...appProviders,
-  ],
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
+],
 };

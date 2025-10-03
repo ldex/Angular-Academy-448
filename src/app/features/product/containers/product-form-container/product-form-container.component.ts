@@ -3,14 +3,12 @@ import {
   Input,
   inject,
   input,
-  numberAttribute,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
-import { Observable, of } from "rxjs";
 import { ProductFormComponent } from "../../components/product-form/product-form.component";
-import { ProductService } from "../../../../services/product.service";
 import { Product } from "../../../../models/product.model";
+import { ProductStore } from "../../../../stores/product.store";
 
 @Component({
   selector: "app-product-form-container",
@@ -21,7 +19,7 @@ import { Product } from "../../../../models/product.model";
     } @else {
       <app-product-form
         [product]="product()"
-        [isSubmitting]="isSubmitting"
+        [isSubmitting]="isSubmitting()"
         (save)="onSave($event)"
         (cancel)="onCancel()"
       >
@@ -31,13 +29,13 @@ import { Product } from "../../../../models/product.model";
 })
 export class ProductFormContainerComponent {
   private router = inject(Router);
-  private productService = inject(ProductService);
 
-  //product$!: Observable<Product | null>;
-  product = this.productService.selectedProduct
-  loading = this.productService.loading;
+ private store = inject(ProductStore)
 
-  isSubmitting = false;
+  product = this.store.selectedProduct
+  loading = this.store.loading;
+
+  isSubmitting = this.store.loading;
   private productId: number | null = null;
 
   id = input<number>();
@@ -45,41 +43,20 @@ export class ProductFormContainerComponent {
   ngOnInit(): void {
     this.productId = this.id() ?? null;
 
-    this.productService.clearSelectedProduct();
+    this.store.clearSelectedProduct();
 
     if (this.productId) {
-      this.productService.getProduct(this.productId);
+      this.store.loadProduct(this.productId);
     }
   }
-
-  // @Input({ transform: numberAttribute })
-  // set id(productId: number) {
-  //   this.productId = productId ? Number(productId) : null;
-
-  //   this.productService.clearSelectedProduct();
-
-  //   if (this.productId) {
-  //     this.productService.getProduct(this.productId)
-  //   }
-  // }
 
   onSave(formData: Partial<Product>): void {
     if (!this.validateFormData(formData)) {
       return;
     }
 
-    this.isSubmitting = true;
-
     if (this.productId) {
-      this.productService.updateProduct(this.productId, formData).subscribe({
-        next: () => {
-          this.router.navigate(["/products"]);
-        },
-        error: (error) => {
-          console.error("Error updating product:", error);
-          this.isSubmitting = false;
-        },
-      });
+      this.store.updateProduct({ id: this.productId, product: formData})
     } else {
       const newProduct = {
         title: formData.title!,
@@ -90,15 +67,7 @@ export class ProductFormContainerComponent {
         rating: { rate: 0, count: 0 },
       };
 
-      this.productService.createProduct(newProduct).subscribe({
-        next: () => {
-          this.router.navigate(["/products"]);
-        },
-        error: (error) => {
-          console.error("Error creating product:", error);
-          this.isSubmitting = false;
-        },
-      });
+      this.store.createProduct(newProduct);
     }
   }
 
